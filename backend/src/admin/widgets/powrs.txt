@@ -1,0 +1,108 @@
+import { useState, useEffect } from 'react';
+import { defineWidgetConfig } from "@medusajs/admin-sdk";
+import Medusa from "@medusajs/js-sdk";
+import { Container } from "@medusajs/ui";
+import { Toaster } from "@medusajs/ui";
+import { SummarySection } from '../table/components/SummarySection';
+import { WorkingMechanismSection } from '../table/components/WorkingMechanismSection';
+import { BenefitsSection } from '../table/components/BenefitsSection';
+import { SideEffectsSection } from '../table/components/SideEffectsSection';
+import { CharacteristicsSection } from '../table/components/CharacteristicsSection';
+import { PreparationSection } from '../table/components/PreparationSection';
+import { CertificatesSection } from '../table/components/CertificatesSection';
+import { ReferencesSection } from '../table/components/ReferencesSection';
+import type { Product, TableData } from '../table/types';
+
+const sdk = new Medusa({
+  baseUrl: "http://localhost:9000",
+  debug: process.env.NODE_ENV === "development",
+  auth: { type: "session" },
+});
+
+const ProductDetailsManager = () => {
+  const [currentProduct, setCurrentProduct] = useState<Product | null>(null);
+  const [tableData, setTableData] = useState<TableData>({
+    summary: "",
+    workingMechanism: "",
+    characteristics: [],
+    certificates: [],
+    benefits: [],
+    sideEffects: [],
+    references: [],
+    preparation: []
+  });
+
+  const getProductId = () => {
+    const parts = window.location.pathname.split('/');
+    const productIndex = parts.findIndex(part => part === 'products');
+    return productIndex !== -1 ? parts[productIndex + 1] : null;
+  };
+
+  useEffect(() => {
+    const productId = getProductId();
+    if (!productId) return;
+
+    const loadProduct = async () => {
+      try {
+        const { product } = await sdk.admin.product.retrieve(productId);
+        setCurrentProduct(product);
+        
+        if (product?.metadata?.table) {
+          if (typeof product.metadata.table === 'string') {
+            setTableData(JSON.parse(product.metadata.table));
+          }
+        }
+      } catch (error) {
+        console.error("Error loading product:", error);
+      }
+    };
+
+    loadProduct();
+  }, []);
+
+  const updateTable = async (newData: Partial<TableData>): Promise<boolean> => {
+    if (!currentProduct?.id) return false; // Return false instead of undefined
+    
+    try {
+      const updatedData = {
+        ...tableData,
+        ...newData
+      };
+      
+      await sdk.admin.product.update(currentProduct.id, {
+        metadata: {
+          ...currentProduct.metadata,
+          table: JSON.stringify(updatedData)
+        }
+      });
+      
+      setTableData(updatedData);
+      return true;
+    } catch (error) {
+      console.error("Error updating data:", error);
+      return false;
+    }
+  };
+
+  if (!currentProduct) return null;
+
+  return (
+    <Container>
+      <SummarySection tableData={tableData} updateTable={updateTable} />
+      <WorkingMechanismSection tableData={tableData} updateTable={updateTable} />
+      <BenefitsSection tableData={tableData} updateTable={updateTable} />
+      <SideEffectsSection tableData={tableData} updateTable={updateTable} />
+      <CharacteristicsSection tableData={tableData} updateTable={updateTable} />
+      <PreparationSection tableData={tableData} updateTable={updateTable} />
+      <CertificatesSection tableData={tableData} updateTable={updateTable} sdk={sdk} />
+      <ReferencesSection tableData={tableData} updateTable={updateTable} />
+      <Toaster />
+    </Container>
+  );
+};
+
+export const config = defineWidgetConfig({
+  zone: "product.details.after",
+});
+
+export default ProductDetailsManager;

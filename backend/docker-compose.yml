@@ -1,0 +1,53 @@
+version: "3.8"
+
+services:
+  medusa_postgres:
+    image: postgres:13
+    container_name: medusa_postgres
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 12345678
+      POSTGRES_DB: medusa-medusa-store
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  medusa_redis:
+    image: redis:6
+    container_name: medusa_redis
+    ports:
+      - "6379:6379"
+
+  medusa_minio:
+    image: minio/minio
+    container_name: medusa_minio
+    command: server /data
+    environment:
+      MINIO_ACCESS_KEY: minioadmin
+      MINIO_SECRET_KEY: minioadmin
+    ports:
+      - "9006:9006"  # S3 API
+      - "9001:9001"  # MinIO Console
+    volumes:
+      - minio_data:/data
+
+  medusa_meilisearch:
+    image: getmeili/meilisearch:latest
+    container_name: medusa_meilisearch
+    ports:
+      - "7700:7700"
+    volumes:
+      - meilisearch_data:/data.ms
+    environment:
+      MEILI_MASTER_KEY: ms
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:7700"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  postgres_data:
+  minio_data:
+  meilisearch_data:
