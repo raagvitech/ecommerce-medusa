@@ -1,48 +1,69 @@
+# 🚀 Backend Run Guide
 
-# Backend Run Guide and  Prerequisite steps
+## 📌 Prerequisites
 
-## Installation Guide
+Before setting up the backend, ensure you have the following installed:
 
-Follow these steps to set up the  backend application:
+- **Docker**: Install the Docker app on your local machine.
+- **Windows Subsystem for Linux (WSL)**: Follow these steps to install WSL:
+  1. Open **Command Prompt** as an administrator.
+  2. Run the following command:
+     ```bash
+     wsl --install
+     ```
+  3. Download and install Docker from [Docker's official site](https://www.docker.com/).
 
-### 1. Clone the Repository
+---
+
+## 📥 Installation Guide
+
+### 1️⃣ Clone the Repository
+
+Clone the required repositories:
 
 ```bash
+# Clone the backend repository
 git clone https://github.com/RUO-2025/backend.git
+
+# Clone the Medusa E-commerce repository
+git clone https://github.com/raagvitech/ecommerce-medusa.git
 ```
-### 2. Installation 
 
-* Install the Docker app in the local machine
-* Install the WSL (Windows Subsystem for Linux) in the local machine
-  Steps
-  1) Go to cmd prompt, run it as admin.
-  2) press this command in the cmd "wsl --install"
-  3) open the docker app and install the docker
+### 2️⃣ Set Up the Backend
 
+Navigate to the backend directory:
 
 ```bash
-git clone https://github.com/RUO-2025/backend.git
+cd backend
 ```
-1) Go to the Backend directory using cd backend in the terminal
-2) Install the npm install -g yarn
-3) After installation of yarn Type 'yarn'
-4) Run this command 'docker compose up -d' to link with docker
-5) 
 
-### 2. Start the Application
+Install **Yarn** globally:
 
-Use Docker Compose to build and start the application:
+```bash
+npm install -g yarn
+```
+
+After installation, run:
+
+```bash
+yarn
+```
+
+### 3️⃣ Start Docker Services
+
+Run the following command to start Docker services:
 
 ```bash
 docker compose up -d
 ```
 
-### 3. Configure the Environment Variables
+---
 
-Create or update the `.env` file in the backend directory with the following configuration:
+## ⚙️ Configure Environment Variables
+
+Create a `.env` file in the **backend** directory and add the following configuration:
 
 ```env
-
 # General Configuration
 MEDUSA_ADMIN_ONBOARDING_TYPE=default
 STORE_CORS=http://localhost:8000,https://docs.medusajs.com
@@ -52,51 +73,63 @@ REDIS_URL=redis://localhost:6379
 JWT_SECRET=supersecret
 DATABASE_URL=postgres://postgres:12345678@localhost/medusa-medusa-store
 
-# MinIO Configuration
-S3_FILE_URL=http://localhost:9001
-S3_ACCESS_KEY_ID=minioadmin
-S3_SECRET_ACCESS_KEY=minioadmin
-S3_REGION=us-east-1
-S3_BUCKET=medusa-bucket
-S3_ENDPOINT=http://minio:9006
-
-
 # Medusa Admin Configuration
 MEDUSA_ADMIN_ONBOARDING_TYPE=default
-
-
+RAZORPAY_ACCOUNT="GlBP8nTCUY1pzK"
+RAZORPAY_ID="rzp_test_YGYx1WdfJOjOOR"
+RAZORPAY_SECRET="hJu83H2zNUvQVIyE5g370O9a"
+RAZORPAY_WEBHOOK_SECRET="Shubham@2003"
 GOOGLE_CLIENT_ID=<YOUR_GOOGLE_CLIENT_ID>
 GOOGLE_CLIENT_SECRET=<YOUR_GOOGLE_CLIENT_SECRET>
 GOOGLE_CALLBACK_URL=<YOUR_GOOGLE_CALLBACK_URL>
-
-RAZORPAY_ID=<your api key>
-RAZORPAY_SECRET=<your api key secret>
-RAZORPAY_ACCOUNT=<your razorpay account number/merchant id>
-RAZORPAY_WEBHOOK_SECRET=<your web hook secret as defined in the webhook settings in the razorpay dashboard >
+STORE_URL=http://localhost:8000
+ADMIN_URL=http://localhost:9000
 ```
 
-### 4. Install Development Dependencies
+---
+
+## 🛠️ Setup Database and Seed Data
+
+Run database migrations:
 
 ```bash
 yarn medusa db:migrate
 ```
-then
+
+Seed the database with initial data:
 
 ```bash
 yarn seed
 ```
 
-### 5. Create an Admin User
+---
 
-Run the following command to create an admin user:
+## 👤 Create an Admin User
+
+Create an admin user by running:
 
 ```bash
 npx medusa user -e admin-medusa@test.com -p supersecret
 ```
 
+---
+
+## 🚀 Start the Backend Server
+
+Run the development server:
+
 ```bash
 yarn dev
 ```
+
+Your backend application is now up and running! 🎉
+
 ---
 
-Now your RUO backend application is ready to use!
+## 📚 Additional Notes
+- Ensure that **Docker** is running before executing `docker compose up -d`.
+- If you face permission issues with WSL, restart your system and try again.
+- Update the `.env` file with valid Google OAuth credentials before using authentication features.
+
+Happy Coding! 🚀
+
