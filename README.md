@@ -22,9 +22,6 @@ Before setting up the backend, ensure you have the following installed:
 Clone the required repositories:
 
 ```bash
-# Clone the backend repository
-git clone https://github.com/RUO-2025/backend.git
-
 # Clone the Medusa E-commerce repository
 git clone https://github.com/raagvitech/ecommerce-medusa.git
 ```
