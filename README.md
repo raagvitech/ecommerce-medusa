@@ -1,4 +1,4 @@
-# 🚀 Backend Run Guide
+# 🚀 Backend & Storefront Run Guide
 
 ## 📌 Prerequisites
 
@@ -22,6 +22,9 @@ Before setting up the backend, ensure you have the following installed:
 Clone the required repositories:
 
 ```bash
+# Clone the backend repository
+git clone https://github.com/RUO-2025/backend.git
+
 # Clone the Medusa E-commerce repository
 git clone https://github.com/raagvitech/ecommerce-medusa.git
 ```
@@ -122,6 +125,51 @@ yarn dev
 Your backend application is now up and running! 🎉
 
 ---
+
+# 🛒 Storefront Setup Guide
+
+## ⚙️ Configure Environment Variables
+
+Create a `.env` file in the **storefront** directory and add the following configuration:
+
+```env
+# Your Medusa backend, should be updated to where you are hosting your server. Remember to update CORS settings for your server.
+MEDUSA_BACKEND_URL=http://localhost:9000
+
+# Your publishable key that can be attached to sales channels.
+NEXT_PUBLIC_MEDUSA_PUBLISHABLE_KEY=pk_eb032fc41246f7661c3560e72f1207c69f6a4fddb49554c4d1aa80f756d15baf
+
+# Your store URL, should be updated to where you are hosting your storefront.
+NEXT_PUBLIC_BASE_URL=http://localhost:8000
+
+NEXT_PUBLIC_RAZORPAY_KEY="rzp_test_YGYx1WdfJOjOOR"
+NEXT_PUBLIC_SHOP_NAME="Mersate"
+NEXT_PUBLIC_SHOP_DESCRIPTION="Best clothing brand globally"
+
+# Your preferred default region.
+NEXT_PUBLIC_DEFAULT_REGION=us
+
+# Your Next.js revalidation secret.
+REVALIDATE_SECRET=supersecret
+
+# MeiliSearch Configuration
+MEILISEARCH_HOST=https://ms-d9c51c8dd4c7-18859.lon.meilisearch.io
+MEILISEARCH_API_KEY=7c26f26e2051023bab033eb8c3bec8c56ac5e14e
+NEXT_PUBLIC_INDEX_NAME=products
+NEXT_PUBLIC_FEATURE_SEARCH_ENABLED=true
+```
+Install dependencies
+Use Yarn to install all dependencies.
+
+yarn
+
+Start developing
+You are now ready to start up your project.
+
+yarn dev
+---
+
+
 
 ## 📚 Additional Notes
 - Ensure that **Docker** is running before executing `docker compose up -d`.
