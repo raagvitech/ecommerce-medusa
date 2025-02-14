@@ -22,8 +22,6 @@ Before setting up the backend, ensure you have the following installed:
 Clone the required repositories:
 
 ```bash
-# Clone the backend repository
-git clone https://github.com/RUO-2025/backend.git
 
 # Clone the Medusa E-commerce repository
 git clone https://github.com/raagvitech/ecommerce-medusa.git
@@ -178,5 +176,5 @@ yarn dev
 - If you face permission issues with WSL, restart your system and try again.
 - Update the `.env` file with valid Google OAuth credentials before using authentication features.
 
-Happy Coding! 🚀
+
 
